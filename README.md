@@ -19,9 +19,10 @@ It outputs the important column numbers (with index +1) and their importance lev
 The developer of the code is Kenan Evren BOYABATLI kbybtli@gmail.com
 Developer of the system is Uğur YİĞİT, Lecturer Dr. ugur.yigit@medeniyet.edu.tr
 
-
-#Citation Importance:
+## Citation Importance:
 
 Although our algorithm is open source, it is important that our work is recognized and documented academically. In this way, we can trace the origin of the algorithm and those who contributed to its development. Please refer to the following article when using the algorithm:
 
-Gökhan Kazar, Uğur Yiğit, Kenan Evren Boyabatlı, Prediction of Maintenance Cost Overruns in Public School Buildings with the Rough Topological Approach, appearing in Automation in Construction, 2024.
+"Gökhan Kazar, Uğur Yiğit, Kenan Evren Boyabatlı, Prediction of Maintenance Cost Overruns in Public School Buildings with the Rough Topological Approach, appearing in Automation in Construction, 2024."
+
+If you have any questions or feedback, please contact us.
