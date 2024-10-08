@@ -23,8 +23,13 @@ Developer of the system is Dr. Uğur YİĞİT, e-mail: ugur.yigit@medeniyet.edu.
 
 Although our algorithm is open source, it is important that our work is recognized and documented academically. In this way, we can trace the origin of the algorithm and those who contributed to its development. Please refer to the following article when using the algorithm:
 
-"Uğur Yiğit, The rough topology for numerical data, Arxiv. https://doi.org/10.48550/arXiv.2206.05776"
-
-"Gökhan Kazar, Uğur Yiğit, Kenan Evren Boyabatlı, Prediction of Maintenance Cost Overruns in Public School Buildings with the Rough Topological Approach, appearing in Automation in Construction, 2024."
+Gökhan Kazar, Uğur Yiğit, Kenan Evren Boyabatlı,
+Predicting maintenance cost overruns in public school buildings using a rough topological approach,
+Automation in Construction,
+Volume 168, Part A,
+2024,
+105810,
+ISSN 0926-5805,
+https://doi.org/10.1016/j.autcon.2024.105810.
 
 If you have any questions or feedback, please contact us.
