@@ -3,21 +3,21 @@ import numpy as np
 import statistics
 
 class TDR():
-  def __init__(self,data,addID=True):
+  def run(self, data, round_level = 3):
     """
-        Parameters:
-        -----------
-        data : pandas.DataFrame or list-like
-            Input data to be processed. If not a DataFrame, it will be converted to one.
+    This function is a topological dimensionality reduction algorithm.
+
+    :param df:
+    :return numpy array [index of important column from original data, importance level]:
     """
 
-    self.data = data
-    self.addID = addID
-    if not isinstance(self.data, pd.DataFrame):
-      self.data = pd.DataFrame(self.data)
+    if not isinstance(data, pd.DataFrame):
+        data = pd.DataFrame(data)
 
+    t_data, _ = self.transform(data, round_level)
+    return self.core(t_data)
 
-  def core(self):
+  def core(self, t_data, addID = True):
     """
     If dataframe have not ID column addID is must True.
 
@@ -25,30 +25,29 @@ class TDR():
 
     This function is a topological dimensionality reduction algorithm.
 
-    :param converted df, addID=True:
-    :return numpy array [index of important column, importance level]:
+    :param transformed df, addID=True:
+    :return numpy array [index of important column from original data, importance level]:
     """
-
-    if self.addID:
-      df.insert(0,"ID",np.arange(1,df.shape[0]+1))
+    if addID:
+    	t_data.insert(0,"ID",np.arange(1,t_data.shape[0]+1))
 
     ##Initialize-0
-    ds0=self.data.shape[0]
-    ds1=self.data.shape[1]
+    ds0=t_data.shape[0]
+    ds1=t_data.shape[1]
 
-    df_y=self.data.iloc[:,-1].values
-    df_0=self.data.iloc[:,0].values
+    df_y=t_data.iloc[:,-1].values
+    df_0=t_data.iloc[:,0].values
 
     IC=[] #important column and importance level
     BaseRla=set()
     BaseB=set()
     X=set()
-    cl_lA=[list(range(1, ds1-1))] + [list(range(1, ds1-1))[:i] + list(range(1, ds1-1))[i+1:] for i in range(ds1-2)]
+    cl_lA = [list(range(1, ds1-1))] + [list(range(1, ds1-1))[:i] + list(range(1, ds1-1))[i+1:] for i in range(ds1-2)]
     ##Initialize-0
 
     ##Shine Examples
     for i in range(ds0):
-      if int(df_y[i])==0:
+      if int(df_y[i]) == 0:
         X.add(df_0[i])
     ##Shine Examples
 
@@ -60,12 +59,13 @@ class TDR():
       U_R = []
       U = list(df_0)
       cl_l=cl_lA[p]
-      print(self.data.columns[p])
-      print(cl_l)
       ##Initialize-1
+      #print(t_data.columns[p])
+      #print(cl_l)
+      
 
       ##Equivalence Classes
-      df_s=self.data.iloc[:,cl_l].values
+      df_s=t_data.iloc[:,cl_l].values
       while U:
         i = U[0]
         chc = [i]
@@ -86,25 +86,25 @@ class TDR():
             B.append(j)
       ##Lower Approximation-Border
 
-
+      """   	
       print("Examples",U)
       print("Shine Examples",X)
       print("Equivalence Classes",U_R)
       print("Lower Approximation",Rla)
       print("Border",B)
       print("*"*75)
-
+      """
 
       if p>0:
         if not (BaseRla==set(Rla) and BaseB==set(B)):
-            IC.append([p, len(BaseB.symmetric_difference(set(B)))])
+            IC.append([p-1, len(BaseB.symmetric_difference(set(B)))])
       else:
         BaseRla=set(Rla)
         BaseB=set(B)
 
     return np.array(IC)
 
-  def transform(self, round_level = 3):
+  def transform(self, data, round_level = 3):
     """
     This function convert data into categories (1,2,3,4,...) based on standard deviation.
 
@@ -113,35 +113,36 @@ class TDR():
     If there is an ID column in the dataset, please cancel this column.
 
     :param df:
-    :return convert df:
+    :return convert df and transform dict:
     """
-    self.data_t = self.data.copy()
-    self.transform_dict = {}
+    t_data = data.copy()
+    transform_dict = {}
 
-    for i in range(self.data_t.shape[1]-1):
+    for i in range(t_data.shape[1]-1):
       # Convert the column to numeric type, coercing errors to NaN
       used_class_list = [] # To collect used classes
-      self.data_t.iloc[:, i] = pd.to_numeric(self.data_t.iloc[:, i], errors='coerce') # Convert the i-th column of self.data_t to numeric values, setting non-convertible entries to NaN
-      self.transform_dict[i] = {} # Information about which values ​​are assigned to which classes
+      t_data.iloc[:, i] = pd.to_numeric(t_data.iloc[:, i], errors='coerce') # Convert the i-th column of self.t_data to numeric values, setting non-convertible entries to NaN
+      transform_dict[i] = {} # Information about which values ​​are assigned to which classes
 
-      c = statistics.stdev(self.data_t.iloc[:,i].dropna())
+      c = statistics.stdev(t_data.iloc[:,i].dropna())
       d = 1
 
-      while len(used_class_list) != (self.data_t.iloc[:,i].shape[0] - self.data_t.iloc[:, i].isna().sum()):
+      while len(used_class_list) != (t_data.iloc[:,i].shape[0] - t_data.iloc[:, i].isna().sum()):
         try:
-          v = round(np.nanmax([t for j,t in enumerate(self.data_t.iloc[:,i]) if (j not in used_class_list)]) - c, round_level) # normal:3
+          v = round(np.nanmax([t for j,t in enumerate(t_data.iloc[:,i]) if (j not in used_class_list)]) - c, round_level) # normal:3
 
           #print(v,c,(df.iloc[:,i] > v).sum())
 
           # Converts class
-          for j, k in enumerate(self.data_t.iloc[:,i]):
+          for j, k in enumerate(t_data.iloc[:,i]):
 
             if (j not in used_class_list) and (k>=v):
-              self.data_t.iloc[j,i] = d
-              self.transform_dict[i][d] = v
+              t_data.iloc[j,i] = d
+              transform_dict[i][d] = v
               used_class_list.append(j)
 
           d += 1
         except Exception as e:
           print("Rise an Error: ",e)
           break
+    return t_data, transform_dict
