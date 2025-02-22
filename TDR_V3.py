@@ -104,7 +104,7 @@ class TDR():
 
     return np.array(IC)
 
-  def transform(self):
+  def transform(self, round_level = 3):
     """
     This function convert data into categories (1,2,3,4,...) based on standard deviation.
 
@@ -118,7 +118,6 @@ class TDR():
     self.data_t = self.data.copy()
     self.transform_dict = {}
 
-    round_level = 3
     for i in range(self.data_t.shape[1]-1):
       # Convert the column to numeric type, coercing errors to NaN
       used_class_list = [] # To collect used classes
@@ -146,10 +145,3 @@ class TDR():
         except Exception as e:
           print("Rise an Error: ",e)
           break
-      
-
- 
-
-
-
- 
