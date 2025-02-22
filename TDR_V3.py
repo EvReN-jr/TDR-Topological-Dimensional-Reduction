@@ -1,6 +1,6 @@
 import pandas as pd
-from collections import Counter
 import numpy as np
+import statistics
 
 class TDR():
   def __init__(self,data,addID=True):
